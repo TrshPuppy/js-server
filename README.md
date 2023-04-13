@@ -13,10 +13,10 @@ docker build -t server .
 ```
 
 ```
-docker run --name server --network host server
+docker run -p 127.0.0.1:8080:8080 --name server server
 ```
 
-I had an issue trying to run `docker run --name server -p 127.0.0.1:8080:8080 server`. Curl would respond with `curl (56) Recv failure: Connection reset by peer` even when `docker ps` showed:
+I had an issue trying to run this container with the `--publish` switch. Curl would respond with `curl (56) Recv failure: Connection reset by peer` even when `docker ps` showed:
 
 ```
 CONTAINER ID   IMAGE     COMMAND                  CREATED          STATUS          PORTS                      NAMES
@@ -27,8 +27,7 @@ I think this has something to do with my environment over anything else. Accordi
 
 ## Other notes:
 
-Additionally, during the interview, the code I had written had a bug in which the server would always return "OK" even when it had never seen a word before. That's because I was handling the logic outside of the `request.on("end",())` function. Since `request.on("data",())` is asynchronous, the logic I had written outside of it was garbage because it was executing before the request data was finished sending. This is fixed now that I've added the `request.on("end",())` listeneer.
+Additionally, during the interview, the code I had written had a bug in which the server would always return "OK" even when it had never seen a word before. 
 
-## Thank you again for today's interview. I appreciate all the time and consideration you've given me as an applicant, and I hope I can repay you all in the future with some good work!
+That was because I was handling the logic outside of the `request.on("end",())` function. Since `request.on("data",())` is asynchronous, the logic I had written outside of it was garbage because it was executing before the request data was finished sending. This is fixed now that I've added the `request.on("end",())` listener.
 
--Rose P.
