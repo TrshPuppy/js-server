@@ -1,7 +1,7 @@
 const http = require("node:http");
 
 const seenWords = [];
-const host = "localhost";
+const host = "0.0.0.0";
 
 const port = 8080;
 
