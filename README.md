@@ -1,6 +1,6 @@
 # This is a simple HTTP server made using node
 
-It listens on port 8080 on the localhost (127.0.0.1) for a POST request to the "/words" endpoint.
+It listens on port 8080 on the localhost (0.0.0.0) for a POST request to the "/words" endpoint.
 
 If the data in the request is a word we haven't seen before, the server responds with the status code "418 I'm a teapot."
 
@@ -13,7 +13,7 @@ docker build -t server .
 ```
 
 ```
-docker run -p 127.0.0.1:8080:8080 --name server server
+docker run -p 0.0.0.0:8080:8080 --name server server
 ```
 
 I had an issue trying to run this container with the `--publish` switch. Curl would respond with `curl (56) Recv failure: Connection reset by peer` even when `docker ps` showed:
@@ -27,7 +27,7 @@ I think this has something to do with my environment over anything else. Accordi
 
 ## Other notes:
 
-Additionally, during the interview, the code I had written had a bug in which the server would always return "OK" even when it had never seen a word before. 
+Additionally, during the interview, the code I had written had a bug in it which the server would always return "OK" even when it had never seen a word before. 
 
 That was because I was handling the logic outside of the `request.on("end",())` function. Since `request.on("data",())` is asynchronous, the logic I had written outside of it was garbage because it was executing before the request data was finished sending. This is fixed now that I've added the `request.on("end",())` listener.
 
