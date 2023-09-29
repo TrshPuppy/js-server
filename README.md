@@ -1,6 +1,6 @@
 # This is a simple HTTP server made using node
 
-It listens on port 8080 on the localhost (0.0.0.0) for a POST request to the "/words" endpoint.
+It listens on port 8080 on 0.0.0.0 for a POST request to the "/words" endpoint.
 
 If the data in the request is a word we haven't seen before, the server responds with the status code "418 I'm a teapot."
 
