@@ -15,19 +15,15 @@ docker build -t server .
 ```
 docker run -p 0.0.0.0:8080:8080 --name server server
 ```
-
-I had an issue trying to run this container with the `--publish` switch. Curl would respond with `curl (56) Recv failure: Connection reset by peer` even when `docker ps` showed:
-
+## Curl command:
 ```
-CONTAINER ID   IMAGE     COMMAND                  CREATED          STATUS          PORTS                      NAMES
-xxxxxxxxxxxx   server    "docker-entrypoint.s…"   15 seconds ago   Up 15 seconds   127.0.0.1:8080->8080/tcp   server
+curl -X POST http://127.0.0.1:8080/words --data hi --verbose
 ```
 
-I think this has something to do with my environment over anything else. According to Docker's documentation, there's no reason this shouldn't have worked.
+## Notes:
+During the interview, I was unaware of the fact that `localhost` from within the Docker container does **not** connect to the `localhost` of the host. That's why I was unable to connect to the server once it was running from inside Docker. To fix this, I've changed the `host` variable in `http.js` to `0.0.0.0`. The Docker command also has to reflect this.
 
-## Other notes:
-
-Additionally, during the interview, the code I had written had a bug in it which the server would always return "OK" even when it had never seen a word before. 
+Additionally, the code I had written had a bug in it which the server would always return "OK" even when it had never seen a word before. 
 
 That was because I was handling the logic outside of the `request.on("end",())` function. Since `request.on("data",())` is asynchronous, the logic I had written outside of it was garbage because it was executing before the request data was finished sending. This is fixed now that I've added the `request.on("end",())` listener.
 
